@@ -3,8 +3,21 @@ import 'photo_model.dart';
 import 'http_service.dart';
 import 'photo_detail.dart';
 
-class PhotosPage extends StatelessWidget {
+class PhotosPage extends StatefulWidget {
+  const PhotosPage({Key? key}) : super(key: key);
+
+  @override
+  State<PhotosPage> createState() {
+    return _PhotosPageState();
+  }
+}
+
+class _PhotosPageState extends State<PhotosPage> {
   final HttpService httpService = HttpService();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,31 +25,31 @@ class PhotosPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Photos"),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Photo>>(
         future: httpService.getPhotos(),
-        builder: (BuildContext context, AsyncSnapshot<List<Photo>> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Photo> photos = snapshot.data!;
-            return ListView(
-              children: photos
-                  .map(
-                    (Photo photo) => ListTile(
-                  title: Text(photo.title),
-                  subtitle: Text("${photo.albumId}"),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => PhotoDetail(
-                        photo: photo,
-                      ),
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                Photo photo = snapshot.data![index];
+                return Container(
+                  width: 180,
+                  height: 139,
+                  margin: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(photo.thumbnailUrl),
+                      fit: BoxFit.fill,
                     ),
                   ),
-                ),
-              )
-                  .toList(),
+                );
+              },
+              itemCount: snapshot.data!.length,
             );
-          } else {
-            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
           }
+          return CircularProgressIndicator();
         },
       ),
     );

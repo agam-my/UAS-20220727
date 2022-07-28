@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'post_post.dart';
+import 'post_put.dart';
+import 'post_patch.dart';
 import 'albums.dart';
 import 'album_post.dart';
 import 'comment_post.dart';
@@ -31,7 +34,37 @@ class PostsPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Drawer Header'),
+              child: Text('Menu API'),
+            ),
+            ListTile(
+              title: const Text('Posts Post'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PostsPost()));
+              },
+            ),
+            ListTile(
+              title: const Text('Posts Put'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PostsPut()));
+              },
+            ),
+            ListTile(
+              title: const Text('Posts Patch'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => PostsPatch()));
+              },
             ),
             ListTile(
               title: const Text('Albums'),

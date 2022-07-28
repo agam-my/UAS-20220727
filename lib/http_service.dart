@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:convert' as convert;
 import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
 import 'post_model.dart';
 import 'album_model.dart';
 import 'comment_model.dart';
@@ -71,59 +71,15 @@ class HttpService {
     }
   }
 
-  Future<Comment> createComment(String title) async {
-    final response = await http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/comments'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'title': title,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      return Comment.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create comment.');
-    }
-  }
-
-  Future<Album> createAlbum(String title) async {
-    final response = await http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'title': title,
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      return Album.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed to create album.');
-    }
-  }
-
   Future<List<Photo>> getPhotos() async {
     Response res = await get(photosURL);
 
     if (res.statusCode == 200) {
-      List<dynamic> body = jsonDecode(res.body);
+      List<dynamic> list = convert.jsonDecode(res.body);
 
-      List<Photo> photos = body
+      List<Photo> photos = list
           .map(
-            (dynamic item) => Photo.fromJson(item),
+            (e) => Photo.fromJson(e)
       )
           .toList();
 
